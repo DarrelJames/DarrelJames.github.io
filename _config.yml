@@ -1,11 +1,11 @@
 # Site settings
-author: Darrel C
-title: 
+author: Darrel Castellano
+title: <br> it down
 header-img: img/home-bg.png
 email: dcastellano2007@gmail.com
-copyright_name: Darrel C
+copyright_name: Darrel Castellano
 description: > # this means to ignore newlines until "baseurl:"
-  
+  The Journey
 baseurl: "" # the subpath of your site, e.g. /blog
 twitter_username: 
 github_username:  DarrelJames
