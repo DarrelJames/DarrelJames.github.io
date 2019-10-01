@@ -24,7 +24,7 @@ I started off by running
 
 This command generated a project skeleton for creating a rubygem
 
-![](https://imgur.com/a/7HjjOr8)
+![](https://i.imgur.com/b5XloIv.png)
 
 I created a few more files
 
