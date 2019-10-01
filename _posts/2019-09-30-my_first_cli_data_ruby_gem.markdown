@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "My first CLI Data ruby gem"
-date:       2019-10-01 01:07:14 +0000
+date:       2019-09-30 21:07:15 -0400
 permalink:  my_first_cli_data_ruby_gem
 ---
 
@@ -24,7 +24,7 @@ I started off by running
 
 This command generated a project skeleton for creating a rubygem
 
-![](https://pasteboard.co/IzScmgE.png)
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/7HjjOr8" data-context="false" ><a href="//imgur.com/a/7HjjOr8"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 I created a few more files
 
