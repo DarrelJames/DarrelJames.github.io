@@ -24,7 +24,7 @@ I started off by running
 
 This command generated a project skeleton for creating a rubygem
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/7HjjOr8" data-context="false" ><a href="//imgur.com/a/7HjjOr8"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+![](https://imgur.com/a/7HjjOr8)
 
 I created a few more files
 
