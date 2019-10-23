@@ -1,0 +1,184 @@
+I"z<p>Whenever my girlfriend travels, she likes to visit the local museums. So I decided to create a gem that would scrape a website with a list of museums. I did a quick google search and found this website, <a href="https://www.smithsonianmag.com/museumday/museum-day-2019/">Smithsonian</a>. They hold an annual event called Museum Day, which happened two weeks ago.</p>
+
+<p>Going through that website</p>
+<ol>
+  <li>You can search museums by zip code</li>
+  <li>Upon entering a zip code, it lists museums in the area</li>
+  <li>Choosing a museum will then give you more detailed information.</li>
+</ol>
+
+<h4 id="i-decided-to-name-my-cli-gem-museum_day">I decided to name my CLI gem: museum_day</h4>
+
+<p>With that, I had enough information to get my project started.</p>
+
+<p>I started off by running</p>
+
+<blockquote>
+  <p>bundle gem museum_day</p>
+</blockquote>
+
+<p>This command generated a project skeleton for creating a rubygem</p>
+
+<p><img src="https://i.imgur.com/b5XloIv.png" alt="" /></p>
+
+<p>I created a few more files</p>
+
+<p><strong>/bin/museum_day</strong><br />
+<strong>/lib/museum_day/scraper.rb</strong><br />
+<strong>/lib/museum_day/museum.rb</strong><br />
+<strong>/lib/museum_day/cli.rb</strong></p>
+
+<h4 id="binmuseum_day">/bin/museum_day</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env ruby</span>
+
+<span class="nb">require</span> <span class="s2">"bundler/setup"</span>
+<span class="nb">require</span> <span class="s2">"museum_day"</span>
+
+<span class="no">MuseumDay</span><span class="o">::</span><span class="no">CLI</span><span class="p">.</span><span class="nf">new</span><span class="p">.</span><span class="nf">call</span>
+</code></pre></div></div>
+
+<p>This is our executable. It allows a user to run my gem by just typing <code class="highlighter-rouge">museum_day</code>.
+It creates a new instance of CLI and calls the method <code class="highlighter-rouge">#call</code>.</p>
+
+<h4 id="scraperrb">scraper.rb</h4>
+
+<p>The purpose of this file to scrape all the museums based on the zipcord the user enters.
+Contains 3 methods.</p>
+
+<ol>
+  <li><strong>get_museums_page</strong></li>
+</ol>
+
+<p>uses Nokogiri to parse the HTML and return it.</p>
+
+<ol>
+  <li><strong>scrape_museums_index</strong></li>
+</ol>
+
+<p>calls #get_museums_page and retrieves information using css selectors</p>
+
+<ol>
+  <li><strong>make_museums</strong></li>
+</ol>
+
+<p>interates through #scrape_museums_index and call a class method from Museum to instantiate new objects</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class MuseumDay::Scraper
+
+  attr_accessor :zipcode
+
+  def initialize(zipcode)
+    @zipcode = zipcode
+  end
+
+  def get_museums_page
+    Nokogiri::HTML(open("https://www.smithsonianmag.com/museumday/search/?q=&amp;around_zip=#{zipcode}"))
+  end
+
+  def scrape_museums_index
+    self.get_museums_page.css("div.museum div.museum-text")
+  end
+
+  def make_museums
+    scrape_museums_index.each do |museum|
+      MuseumDay::Museum.new_from_index(museum)
+    end
+  end
+
+end
+</code></pre></div></div>
+
+<h4 id="museumrb">museum.rb</h4>
+
+<p>The purpose of this file is to keep track of all the museum objects that’s been instantiated and set different attributes including the :address, :phone_number, :website_url, :fb, :twitter, and finally the :description.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class MuseumDay::Museum
+
+  attr_accessor :name, :city, :url, :address, :phone_number, :website_url, :twitter, :fb,
+  :description, :hours, :doc
+
+  @@all = []
+
+  def self.new_from_index(museum)
+    self.new(
+      museum.css("h4.name").text,
+      museum.css("h5.location").text,
+      museum.css("a").attribute("href").value,
+      museum.at("div strong").next_sibling.text.strip
+    )
+  end
+
+  def initialize(name = nil, city = nil, url = nil, hours = nil)
+    @name = name
+    @city = city
+    @url = url
+    @hours = hours
+    @@all &lt;&lt; self
+  end
+
+  def self.all
+    @@all
+  end
+
+  def self.find(id)
+    self.all[id-1]
+  end
+
+  def address
+    @address ||= doc.css("p.address").text.strip
+  end
+
+  def phone_number
+    @phone_number ||= doc.at("i.fa-phone").next_sibling.text.strip
+  end
+
+  def website_url
+    @website_url ||= doc.css("i.fa-external-link + a").attribute("href").value
+  end
+
+  def social_urls
+    social_links = doc.css("div.contact a").collect { |link| link.attribute("href").value }
+
+    social_links.each do |link|
+      if link.include?("twitter")
+        self.twitter = link
+      elsif link.include?("facebook")
+        self.fb = link
+      end
+    end
+  end
+
+  def description
+    @description ||= doc.css("div.aux-info p").first.text
+  end
+
+  def doc
+    @doc ||= Nokogiri::HTML(open("https://www.smithsonianmag.com#{self.url}"))
+  end
+
+  def self.clear_all
+    @@all.clear
+  end
+end
+</code></pre></div></div>
+
+<h4 id="clirb">CLI.rb</h4>
+
+<p>Finally, the file that brings everything together.
+I spent most of my time working in this file.</p>
+
+<p>This file is responsible for displaying information based on the user’s input.</p>
+
+<p>Check out my repo for the full source code <a href="https://github.com/DarrelJames/museum_day">here</a>.</p>
+
+<h4 id="try-it-your-self">Try it your self!</h4>
+
+<p>You can install by typing</p>
+
+<p><code class="highlighter-rouge">gem install museum_day</code></p>
+
+<p>and then running it by typing</p>
+
+<p><code class="highlighter-rouge">museum_day</code></p>
+:ET

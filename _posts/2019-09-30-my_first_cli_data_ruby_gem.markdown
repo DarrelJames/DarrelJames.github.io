@@ -184,4 +184,3 @@ You can install by typing
 and then running it by typing
 
 `museum_day`
-
