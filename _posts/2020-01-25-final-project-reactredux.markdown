@@ -5,16 +5,27 @@ date: "2020-01-25 10:53:48 -0800"
 ---
 
 
-<<<<<<< HEAD
 Github:
+[client](https://github.com/DarrelJames/calorie-tracker-client)
+[backend](https://github.com/DarrelJames/calorie-tracker-api)
 
-client: <https://github.com/DarrelJames/calorie-tracker-client)>
+I created a calorie tracker that'll track the foods you consumed on a daily basis and persist your data into Rails API.
 
-backend: <https://github.com/DarrelJames/calorie-tracker-api>
-=======
-> Github:
+I started off by creating the backend by generating a rails app with the `--api` flag. Also with deployment in mind, I specified which database to use by adding `-d postgresql`. So the final command to create the app is:
 
-> client: [](https://github.com/DarrelJames/calorie-tracker-client)
+`rails new NAME --api -d postgresql`
 
-> backend: [](https://github.com/DarrelJames/calorie-tracker-api)
->>>>>>> 3b5bf5d3565174d4ebd061d4c895cf18c64517ad
+For user Authentication I used JSON web tokens. I used devise to handle the creation of user and tokens. I followed a video tutorial by a Flatiron instructor [here](https://youtu.be/qjtht03t7z4)
+
+After get authentication going and stubbed out all the model resources. I generated my react app by running
+
+`npx create-react-app NAME`
+
+Libraries Used:
+
+* [axios](https://github.com/axios/axios): Used to make http requests to API
+* [moment](https://github.com/moment/moment): Mainly formatting
+* [react-redux](https://react-redux.js.org/): State container
+* [redux-form](https://redux-form.com/8.2.2/): Easily connect forms to store and have tons more features, Instant validations for example
+* [redux-thunk](https://github.com/reduxjs/redux-thunk): dispatch asynchronously
+* [react-datepicker](https://reactdatepicker.com/): Simple Date picker, used to select log by date
