@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "Event Planner Sinatra CRUD project"
-date:       2020-01-31 00:09:14 +0000
+date:       2020-01-30 19:09:14 -0500
 permalink:  event_planner_sinatra_crud_project
 ---
 
